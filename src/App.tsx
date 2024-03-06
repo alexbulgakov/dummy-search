@@ -1,16 +1,13 @@
-import { useState } from "react";
 import { SearchForm } from "./components/SearchFrom/SearchForm";
-import { SearchContext } from "./components/SearchResults/SearchContext";
 import { SearchResults } from "./components/SearchResults/SearchResults";
-import { mockUsers } from "./mockUsers";
+
+import { SearchProvider } from "./context/SearchContext/SearchContext";
 
 export default function App() {
-  const [users] = useState(mockUsers);
-
   return (
-    <SearchContext.Provider value={{ users }}>
+    <SearchProvider>
       <SearchForm />
       <SearchResults />
-    </SearchContext.Provider>
+    </SearchProvider>
   );
 }
