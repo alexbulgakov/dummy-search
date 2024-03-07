@@ -82,10 +82,12 @@ export function SearchResults() {
                 subtitle={user.address.city}
               >{`${user.firstName} ${user.lastName}`}</SimpleCell>
             ))}
-            <Footer>
-              {plural(total, "Найден", "Найдено", "Найдено")} {total}{" "}
-              {plural(total, "друг", "друга", "друзей")}
-            </Footer>
+            {currentPage === 1 && (
+              <Footer>
+                {plural(total, "Найден", "Найдено", "Найдено")} {total}{" "}
+                {plural(total, "друг", "друга", "друзей")}
+              </Footer>
+            )}
           </>
         )}
       </Group>
