@@ -83,7 +83,8 @@ export function SearchResults() {
               >{`${user.firstName} ${user.lastName}`}</SimpleCell>
             ))}
             <Footer>
-              Найдено {total} {plural(total, "друг", "друга", "друзей")}
+              {plural(total, "Найден", "Найдено", "Найдено")} {total}{" "}
+              {plural(total, "друг", "друга", "друзей")}
             </Footer>
           </>
         )}

@@ -12,6 +12,7 @@ import {
   usePlatform,
 } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
+import { Icon36LogoVk } from "@vkontakte/icons";
 
 export default function App() {
   const platform = usePlatform();
@@ -29,7 +30,9 @@ export default function App() {
                   style={{ maxWidth: "800px", margin: "0 auto" }}
                   id="find"
                 >
-                  <PanelHeader>Поиск друзей</PanelHeader>
+                  <PanelHeader before={<Icon36LogoVk />}>
+                    Поиск друзей
+                  </PanelHeader>
                   <SearchForm />
                   <SearchResults />
                 </Panel>
