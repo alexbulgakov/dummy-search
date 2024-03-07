@@ -7,7 +7,7 @@ import {
 } from "react";
 
 import api from "../../utils/api";
-import { selectedUserData } from "../../utils/constants";
+import { selectedUserData, responseLengthLimit } from "../../utils/constants";
 import defaultPhoto from "../../public/defaultPhoto.png";
 interface User {
   id: number;
@@ -30,7 +30,8 @@ interface SearchContextType {
   searchResults: User[];
   query: string;
   setQuery: (query: string) => void;
-  searchUsers: (searchQuery: string) => Promise<void>;
+  searchUsers: (searchQuery: string, skip: number) => Promise<void>;
+  total: number;
 }
 
 const defaultSearchContextValue: SearchContextType = {
@@ -38,6 +39,7 @@ const defaultSearchContextValue: SearchContextType = {
   query: "",
   setQuery: () => {},
   searchUsers: async () => {},
+  total: 0,
 };
 
 export const SearchContext = createContext<SearchContextType>(
@@ -49,13 +51,17 @@ export const SearchProvider: FunctionComponent<{ children: ReactNode }> = ({
 }) => {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [query, setQuery] = useState("");
+  const [total, setTotal] = useState(0);
 
-  const searchUsers = useCallback(async (searchQuery: string) => {
+  const searchUsers = useCallback(async (searchQuery: string, skip: number) => {
     setQuery(searchQuery);
+
     try {
       const data = await api.getItems<ApiResponse>(
-        `users/search?&select=${selectedUserData}&q=${searchQuery}`
+        `users/search?limit=${responseLengthLimit}&skip=${skip}&select=${selectedUserData}&q=${searchQuery}`
       );
+
+      setTotal(data.total);
 
       const users = data.users.map((user: Partial<User>) => ({
         id: user.id ?? 0,
@@ -76,7 +82,7 @@ export const SearchProvider: FunctionComponent<{ children: ReactNode }> = ({
 
   return (
     <SearchContext.Provider
-      value={{ searchResults, query, searchUsers, setQuery }}
+      value={{ searchResults, query, searchUsers, setQuery, total }}
     >
       {children}
     </SearchContext.Provider>

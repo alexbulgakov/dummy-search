@@ -1,11 +1,11 @@
 import { useSearch } from "../../hooks/useSearch";
 import { useLoadingAndError } from "../../hooks/useLoadingAndError";
-
-import "./style.css";
+import plural from "plural-ru";
 import {
   Avatar,
   Footer,
   Group,
+  Pagination,
   Placeholder,
   SimpleCell,
   Spinner,
@@ -14,14 +14,43 @@ import {
   Icon56CancelCircleOutline,
   Icon56UsersOutline,
 } from "@vkontakte/icons";
+import { responseLengthLimit } from "../../utils/constants";
+import { useEffect, useState } from "react";
 
 export function SearchResults() {
-  const { searchResults, query } = useSearch();
+  const { searchResults, query, searchUsers, total } = useSearch();
   const { isLoading, error } = useLoadingAndError();
 
-  if (isLoading) {
-    return <Spinner size="medium" style={{ margin: "20px 0" }} />;
-  }
+  const { setError, setLoading } = useLoadingAndError();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const calculatedTotalPages = Math.ceil(total / responseLengthLimit);
+
+  const performSearch = async (currentPage: number) => {
+    const skip = (currentPage - 1) * responseLengthLimit;
+
+    try {
+      setLoading(true);
+      await searchUsers(query, skip);
+      setError(null);
+    } catch (err) {
+      setError("Произошла ошибка при поиске.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    performSearch(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+
+  const handleChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   if (error) {
     return (
@@ -41,16 +70,33 @@ export function SearchResults() {
 
   return (
     <Group>
-      {searchResults.map((user) => (
-        <SimpleCell
-          before={<Avatar size={48} src={user.image} />}
-          key={user.id}
-          subtitle={user.address.city}
-        >{`${user.firstName} ${user.lastName}`}</SimpleCell>
-      ))}
-
-      {searchResults.length === 0 && query.length > 0 && (
-        <Footer>Ничего не найдено</Footer>
+      <Group style={{ height: "630px" }}>
+        {isLoading ? (
+          <Spinner size="medium" />
+        ) : (
+          <>
+            {searchResults.map((user) => (
+              <SimpleCell
+                before={<Avatar size={48} src={user.image} />}
+                key={user.id}
+                subtitle={user.address.city}
+              >{`${user.firstName} ${user.lastName}`}</SimpleCell>
+            ))}
+            <Footer>
+              Найдено {total} {plural(total, "друг", "друга", "друзей")}
+            </Footer>
+          </>
+        )}
+      </Group>
+      {searchResults.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          siblingCount={1}
+          boundaryCount={1}
+          totalPages={calculatedTotalPages}
+          disabled={isLoading ? true : false}
+          onChange={handleChange}
+        />
       )}
     </Group>
   );

@@ -13,7 +13,7 @@ export const SearchForm: React.FC = () => {
     const performSearch = async () => {
       try {
         setLoading(true);
-        await searchUsers(search);
+        await searchUsers(search, 0);
         setError(null);
       } catch (err) {
         setError("Произошла ошибка при поиске.");
