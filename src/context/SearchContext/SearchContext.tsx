@@ -29,12 +29,14 @@ interface ApiResponse {
 interface SearchContextType {
   searchResults: User[];
   query: string;
+  setQuery: (query: string) => void;
   searchUsers: (searchQuery: string) => Promise<void>;
 }
 
 const defaultSearchContextValue: SearchContextType = {
   searchResults: [],
   query: "",
+  setQuery: () => {},
   searchUsers: async () => {},
 };
 
@@ -73,7 +75,9 @@ export const SearchProvider: FunctionComponent<{ children: ReactNode }> = ({
   }, []);
 
   return (
-    <SearchContext.Provider value={{ searchResults, query, searchUsers }}>
+    <SearchContext.Provider
+      value={{ searchResults, query, searchUsers, setQuery }}
+    >
       {children}
     </SearchContext.Provider>
   );
