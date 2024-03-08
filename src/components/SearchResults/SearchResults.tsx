@@ -70,7 +70,7 @@ export function SearchResults() {
 
   return (
     <Group>
-      <Group style={{ height: "630px" }}>
+      <Group style={{ height: "640px" }}>
         {isLoading ? (
           <Spinner size="medium" />
         ) : (
@@ -93,8 +93,9 @@ export function SearchResults() {
       </Group>
       {searchResults.length > 0 && (
         <Pagination
+          style={{ marginTop: "10px" }}
           currentPage={currentPage}
-          siblingCount={1}
+          siblingCount={0}
           boundaryCount={1}
           totalPages={calculatedTotalPages}
           disabled={isLoading ? true : false}

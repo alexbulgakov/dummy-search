@@ -2,23 +2,30 @@ import { useSearch } from "../../hooks/useSearch";
 import { useLoadingAndError } from "../../hooks/useLoadingAndError";
 import { useEffect, useState } from "react";
 import { Group, Search } from "@vkontakte/vkui";
+import { useDebounce } from "../../hooks/useDebounce";
 
 export const SearchForm: React.FC = () => {
   const { searchUsers, setQuery } = useSearch();
   const { setError, setLoading } = useLoadingAndError();
   const [search, setSearch] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const debouncedSearchTerm = useDebounce(search, 500);
 
   useEffect(() => {
     const performSearch = async () => {
-      try {
-        setLoading(true);
-        await searchUsers(search, 0);
-        setError(null);
-      } catch (err) {
-        setError("Произошла ошибка при поиске.");
-      } finally {
+      if (debouncedSearchTerm) {
+        try {
+          setLoading(true);
+          await searchUsers(debouncedSearchTerm, 0);
+          setError(null);
+        } catch (err) {
+          setError("Произошла ошибка при поиске.");
+        } finally {
+          setLoading(false);
+        }
+      } else {
         setLoading(false);
+        setError(null);
       }
     };
 
@@ -28,7 +35,7 @@ export const SearchForm: React.FC = () => {
       setLoading(false);
       setError(null);
     }
-  }, [search, searchUsers, setError, setLoading]);
+  }, [search, searchUsers, setError, setLoading, debouncedSearchTerm]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -36,10 +43,11 @@ export const SearchForm: React.FC = () => {
 
     if (newValue.trim() === "") {
       setQuery("");
-      setSearch(newValue);
-      setInputValue(newValue);
+      setSearch("");
+      setInputValue("");
     } else {
-      setSearch(newValue);
+      const queryValue = newValue.trim().split(/\s+/).join("&");
+      setSearch(queryValue);
     }
   };
 
