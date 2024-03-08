@@ -47,8 +47,7 @@ export const SearchForm: React.FC = () => {
       setSearch("");
       setInputValue("");
     } else {
-      const queryValue = newValue.trim().split(/\s+/).join("&");
-      setSearch(queryValue);
+      setSearch(newValue);
     }
   };
 
