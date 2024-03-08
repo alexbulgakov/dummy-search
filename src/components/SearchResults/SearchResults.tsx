@@ -1,27 +1,28 @@
-import { useSearch } from "../../hooks/useSearch";
-import { useLoadingAndError } from "../../hooks/useLoadingAndError";
-import plural from "plural-ru";
 import {
+  Placeholder,
+  Pagination,
+  SimpleCell,
+  Spinner,
   Avatar,
   Footer,
   Group,
-  Pagination,
-  Placeholder,
-  SimpleCell,
-  Spinner,
 } from "@vkontakte/vkui";
 import {
   Icon56CancelCircleOutline,
   Icon56UsersOutline,
 } from "@vkontakte/icons";
-import { responseLengthLimit } from "../../utils/constants";
 import { useEffect, useState } from "react";
+import plural from "plural-ru";
+
+import { useLoadingAndError } from "../../hooks/useLoadingAndError";
+import { responseLengthLimit } from "../../utils/constants";
+import { useSearch } from "../../hooks/useSearch";
 
 export function SearchResults() {
-  const { searchResults, query, searchUsers, total } = useSearch();
+  const { searchResults, searchUsers, query, total } = useSearch();
   const { isLoading, error } = useLoadingAndError();
 
-  const { setError, setLoading } = useLoadingAndError();
+  const { setLoading, setError } = useLoadingAndError();
   const [currentPage, setCurrentPage] = useState(1);
 
   const calculatedTotalPages = Math.ceil(total / responseLengthLimit);
@@ -77,9 +78,9 @@ export function SearchResults() {
           <>
             {searchResults.map((user) => (
               <SimpleCell
-                before={<Avatar size={48} src={user.image} />}
-                key={user.id}
+                before={<Avatar src={user.image} size={48} />}
                 subtitle={user.address.city}
+                key={user.id}
               >{`${user.firstName} ${user.lastName}`}</SimpleCell>
             ))}
             {currentPage === 1 && (
@@ -93,13 +94,13 @@ export function SearchResults() {
       </Group>
       {searchResults.length > 0 && (
         <Pagination
+          disabled={isLoading ? true : false}
+          totalPages={calculatedTotalPages}
           style={{ marginTop: "10px" }}
           currentPage={currentPage}
-          siblingCount={0}
-          boundaryCount={1}
-          totalPages={calculatedTotalPages}
-          disabled={isLoading ? true : false}
           onChange={handleChange}
+          boundaryCount={1}
+          siblingCount={0}
         />
       )}
     </Group>

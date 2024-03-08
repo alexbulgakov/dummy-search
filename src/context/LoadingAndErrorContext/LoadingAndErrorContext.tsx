@@ -1,10 +1,10 @@
-import { createContext, useState, ReactNode, FunctionComponent } from "react";
+import { FunctionComponent, createContext, ReactNode, useState } from "react";
 
 interface LoadingAndErrorContextType {
-  isLoading: boolean;
-  error: string | null;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
+  error: string | null;
+  isLoading: boolean;
 }
 
 export const LoadingAndErrorContext = createContext<
@@ -19,7 +19,7 @@ export const LoadingAndErrorProvider: FunctionComponent<{
 
   return (
     <LoadingAndErrorContext.Provider
-      value={{ isLoading, error, setLoading, setError }}
+      value={{ setLoading, isLoading, setError, error }}
     >
       {children}
     </LoadingAndErrorContext.Provider>

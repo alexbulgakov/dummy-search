@@ -1,44 +1,45 @@
 import {
-  createContext,
-  useState,
-  ReactNode,
-  useCallback,
   FunctionComponent,
+  createContext,
+  useCallback,
+  ReactNode,
+  useState,
 } from "react";
 
-import api from "../../utils/api";
-import { selectedUserData, responseLengthLimit } from "../../utils/constants";
+import { responseLengthLimit, selectedUserData } from "../../utils/constants";
 import defaultPhoto from "../../public/defaultPhoto.png";
+import api from "../../utils/api";
+
 interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  image: string;
   address: {
     city: string;
   };
+  firstName: string;
+  lastName: string;
+  image: string;
+  id: number;
 }
 
 interface ApiResponse {
   users: User[];
   limit: number;
-  skip: number;
   total: number;
+  skip: number;
 }
 
 interface SearchContextType {
+  searchUsers: (searchQuery: string, skip: number) => Promise<void>;
+  setQuery: (query: string) => void;
   searchResults: User[];
   query: string;
-  setQuery: (query: string) => void;
-  searchUsers: (searchQuery: string, skip: number) => Promise<void>;
   total: number;
 }
 
 const defaultSearchContextValue: SearchContextType = {
+  searchUsers: async () => {},
+  setQuery: () => {},
   searchResults: [],
   query: "",
-  setQuery: () => {},
-  searchUsers: async () => {},
   total: 0,
 };
 
@@ -64,13 +65,13 @@ export const SearchProvider: FunctionComponent<{ children: ReactNode }> = ({
       setTotal(data.total);
 
       const users = data.users.map((user: Partial<User>) => ({
-        id: user.id ?? 0,
-        firstName: user.firstName ?? "",
-        lastName: user.lastName ?? "",
-        image: user.image ?? defaultPhoto,
         address: {
           city: user.address?.city ?? "City unknown",
         },
+        image: user.image ?? defaultPhoto,
+        firstName: user.firstName ?? "",
+        lastName: user.lastName ?? "",
+        id: user.id ?? 0,
       }));
       setSearchResults(users || []);
     } catch (error) {
@@ -82,7 +83,7 @@ export const SearchProvider: FunctionComponent<{ children: ReactNode }> = ({
 
   return (
     <SearchContext.Provider
-      value={{ searchResults, query, searchUsers, setQuery, total }}
+      value={{ searchResults, searchUsers, setQuery, query, total }}
     >
       {children}
     </SearchContext.Provider>

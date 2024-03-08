@@ -1,12 +1,13 @@
-import { useSearch } from "../../hooks/useSearch";
-import { useLoadingAndError } from "../../hooks/useLoadingAndError";
+import { Search, Group } from "@vkontakte/vkui";
 import { useEffect, useState } from "react";
-import { Group, Search } from "@vkontakte/vkui";
+
+import { useLoadingAndError } from "../../hooks/useLoadingAndError";
 import { useDebounce } from "../../hooks/useDebounce";
+import { useSearch } from "../../hooks/useSearch";
 
 export const SearchForm: React.FC = () => {
   const { searchUsers, setQuery } = useSearch();
-  const { setError, setLoading } = useLoadingAndError();
+  const { setLoading, setError } = useLoadingAndError();
   const [search, setSearch] = useState("");
   const [inputValue, setInputValue] = useState("");
   const debouncedSearchTerm = useDebounce(search, 500);
@@ -53,7 +54,7 @@ export const SearchForm: React.FC = () => {
 
   return (
     <Group>
-      <Search value={inputValue} after={null} onChange={onChange} />
+      <Search onChange={onChange} value={inputValue} after={null} />
     </Group>
   );
 };

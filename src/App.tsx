@@ -1,18 +1,19 @@
-import { SearchResults } from "./components/SearchResults/SearchResults";
-import { LoadingAndErrorProvider } from "./context/LoadingAndErrorContext/LoadingAndErrorContext";
-import { SearchForm } from "./components/SearchForm/SearchForm";
-import { SearchProvider } from "./context/SearchContext/SearchContext";
 import {
-  AppRoot,
   SplitLayout,
-  SplitCol,
-  View,
-  Panel,
   PanelHeader,
   usePlatform,
+  SplitCol,
+  AppRoot,
+  Panel,
+  View,
 } from "@vkontakte/vkui";
-import "@vkontakte/vkui/dist/vkui.css";
 import { Icon36LogoVk } from "@vkontakte/icons";
+import "@vkontakte/vkui/dist/vkui.css";
+
+import { LoadingAndErrorProvider } from "./context/LoadingAndErrorContext/LoadingAndErrorContext";
+import { SearchResults } from "./components/SearchResults/SearchResults";
+import { SearchProvider } from "./context/SearchContext/SearchContext";
+import { SearchForm } from "./components/SearchForm/SearchForm";
 
 export default function App() {
   const platform = usePlatform();
