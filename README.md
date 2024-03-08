@@ -10,6 +10,7 @@ In this challenge, it is necessary to implement a people search using a fake jso
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
+  - [Useful resources](#useful-resources)
 
 ## Overview
 
@@ -28,8 +29,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [https://github.com/alexbulgakov/dummy-search](https://github.com/alexbulgakov/dummy-search)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [github.com/alexbulgakov/dummy-search](https://github.com/alexbulgakov/dummy-search)
+- Live Site URL: [dummy-search.vercel.app](https://dummy-search.vercel.app/)
 
 ## My process
 
@@ -38,3 +39,7 @@ Users should be able to:
 - [VK UI](https://vkcom.github.io/VKUI/#/About) - This is a library of adaptive React components for building web applications
 - [React](https://reactjs.org/) - JS library
 - [Dummy JSON](https://dummyjson.com/) - Fake JSON data provider
+
+### Useful resources
+
+- [plural-ru](https://www.npmjs.com/package/plural-ru) - This library helped me to accurately inform the user about how many friends were found in the search. It provides correct declension of nouns and verbs in Russian.
